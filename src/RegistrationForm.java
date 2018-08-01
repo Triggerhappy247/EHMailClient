@@ -4,7 +4,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 
-import javax.mail.*;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Session;
 import java.net.URL;
 import java.util.Properties;
 import java.util.ResourceBundle;
@@ -31,7 +32,7 @@ public class RegistrationForm implements Initializable {
     @FXML
     private void login() {
         System.out.println("Test");
-        Properties props = new Properties();
+        /*Properties props = new Properties();
         props.put("mail.smtp.host", "smtp.gmail.com");
         props.put("mail.smtp.socketFactory.port", "465");
         props.put("mail.smtp.socketFactory.class",
@@ -44,8 +45,8 @@ public class RegistrationForm implements Initializable {
                     protected PasswordAuthentication getPasswordAuthentication() {
                         return new PasswordAuthentication(email.getText(), password.getText());
                     }
-                });
+                });*/
 
-        main.messageDialog(session);
+        main.messageDialog();
     }
 }
