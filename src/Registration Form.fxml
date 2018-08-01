@@ -26,7 +26,7 @@
             <Font name="System Bold" size="18.0" />
          </font>
       </Label>
-      <Button layoutX="100.0" layoutY="236.0" mnemonicParsing="false" text="Login" />
+      <Button fx:id="login" layoutX="100.0" layoutY="236.0" mnemonicParsing="false" text="Login" />
       <Button layoutX="172.0" layoutY="236.0" mnemonicParsing="false" text="Forgot Password" />
    </children>
 </AnchorPane>
