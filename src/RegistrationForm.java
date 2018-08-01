@@ -5,9 +5,6 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 
 import javax.mail.*;
-import javax.mail.internet.AddressException;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
 import java.net.URL;
 import java.util.Properties;
 import java.util.ResourceBundle;
@@ -15,18 +12,24 @@ import java.util.ResourceBundle;
 public class RegistrationForm implements Initializable {
 
     @FXML
-    TextField name,email;
+    private TextField name,email;
     @FXML
-    PasswordField password;
+    private PasswordField password;
     @FXML
-    Button login;
+    private Button login;
+
+    private Main main;
+
+    public void setMain(Main main) {
+        this.main = main;
+    }
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
     }
     @FXML
-    private void login()
-    {
+    private void login() {
         System.out.println("Test");
         Properties props = new Properties();
         props.put("mail.smtp.host", "smtp.gmail.com");
@@ -39,19 +42,10 @@ public class RegistrationForm implements Initializable {
         Session session = Session.getDefaultInstance(props,
                 new javax.mail.Authenticator() {
                     protected PasswordAuthentication getPasswordAuthentication() {
-                        return new PasswordAuthentication(email.getText(),password.getText());
+                        return new PasswordAuthentication(email.getText(), password.getText());
                     }
                 });
-        try {
-            MimeMessage message = new MimeMessage(session);
-            message.addRecipient(Message.RecipientType.TO,new InternetAddress(email.getText()));
-            message.setSubject("Test");
-            message.setText("Test");
-            //send message
-            Transport.send(message);
-            System.out.println("message sent successfully");
-        } catch (AddressException e) {
-            e.printStackTrace();
-        } catch (MessagingException e) {throw new RuntimeException(e);}
+
+        main.messageDialog(session);
     }
 }
