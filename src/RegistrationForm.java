@@ -18,7 +18,6 @@ public class RegistrationForm implements Initializable {
     private PasswordField password;
     @FXML
     private Button login;
-
     private Main main;
 
     public void setMain(Main main) {
@@ -30,9 +29,10 @@ public class RegistrationForm implements Initializable {
 
     }
     @FXML
-    private void login() {
+    private void login()
+    {
         System.out.println("Test");
-        /*Properties props = new Properties();
+        Properties props = new Properties();
         props.put("mail.smtp.host", "smtp.gmail.com");
         props.put("mail.smtp.socketFactory.port", "465");
         props.put("mail.smtp.socketFactory.class",
@@ -43,10 +43,9 @@ public class RegistrationForm implements Initializable {
         Session session = Session.getDefaultInstance(props,
                 new javax.mail.Authenticator() {
                     protected PasswordAuthentication getPasswordAuthentication() {
-                        return new PasswordAuthentication(email.getText(), password.getText());
+                        return new PasswordAuthentication(email.getText(),password.getText());
                     }
-                });*/
-
-        main.messageDialog();
+                });
+        main.messageDialog(session);
     }
 }
