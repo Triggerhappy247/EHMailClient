@@ -2,6 +2,8 @@
   <library name="javax.mail">
     <CLASSES>
       <root url="jar://$PROJECT_DIR$/src/javax.mail.jar!/" />
+      <root url="jar://C:/Program Files (x86)/MySQL/Connector J 8.0/mysql-connector-java-8.0.12.jar!/" />
+      <root url="jar://$PROJECT_DIR$/src/jacob.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />
