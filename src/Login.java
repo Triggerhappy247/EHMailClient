@@ -54,7 +54,6 @@ public class Login implements Initializable {
     {
         incorrect.setVisible(false);
         ActiveXComponent application = new ActiveXComponent("hMailServer.Application");
-        System.out.println("hMailServer Library Loaded");
         Dispatch.call(application,"Authenticate","Administrator","123456");
         Variant variant = application.getProperty("Domains");
         Dispatch domains = variant.getDispatch();
@@ -115,6 +114,7 @@ public class Login implements Initializable {
             Folder emailFolder = emailStore.getFolder("INBOX");
             emailFolder.open(Folder.READ_ONLY);
             Message[] messages = emailFolder.getMessages();
+            System.out.println(String.format("INBOX - %d Messages",messages.length));
             for (int i = 0; i < messages.length; i++) {
                 Message message = messages[i];
                 System.out.println("---------------------------------");
