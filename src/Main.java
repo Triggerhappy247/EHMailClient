@@ -18,11 +18,11 @@ public class Main extends Application {
     @Override
     public void start(Stage stage) throws Exception{
         setPrimaryStage(stage);
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("Registration Form.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("Login.fxml"));
         AnchorPane root = (AnchorPane) loader.load();
-        RegistrationForm regForm = loader.getController();
-        regForm.setMain(this);
-        stage.setTitle("Register/Login");
+        Login login = loader.getController();
+        login.setMain(this);
+        stage.setTitle("Login");
         stage.setScene(new Scene(root));
         stage.show();
     }
@@ -30,7 +30,22 @@ public class Main extends Application {
         launch(args);
     }
 
-    public void messageDialog(Session session)
+    public void registrationForm()
+    {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("Registration Form.fxml"));
+        AnchorPane root = null;
+        try {
+            root = (AnchorPane) loader.load();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        RegistrationForm registrationForm = loader.getController();
+        primaryStage.setTitle("REGISTER");
+        primaryStage.setScene(new Scene(root));
+        primaryStage.show();
+    }
+
+    public void messageDialog(Session session,String email)
     {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("SendMessage.fxml"));
         AnchorPane root = null;
@@ -41,6 +56,7 @@ public class Main extends Application {
         }
         SendMessage sendMsg = loader.getController();
         sendMsg.setSession(session);
+        sendMsg.setEmail(email);
         primaryStage.setTitle("Send Message");
         primaryStage.setScene(new Scene(root));
         primaryStage.show();

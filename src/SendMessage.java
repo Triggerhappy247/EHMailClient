@@ -19,7 +19,13 @@ public class SendMessage implements Initializable {
     private TextField toField,subject;
     @FXML
     private TextArea messageField;
+
     private Session session;
+    private String email;
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
     public void setSession(Session session) {
         this.session = session;
@@ -35,7 +41,9 @@ public class SendMessage implements Initializable {
     {
         try {
             MimeMessage message = new MimeMessage(session);
+
             message.addRecipient(Message.RecipientType.TO,new InternetAddress(toField.getText()));
+            message.setFrom(email);
             message.setSubject(subject.getText());
             message.setText(messageField.getText());
             //send message

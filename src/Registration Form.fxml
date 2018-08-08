@@ -6,11 +6,13 @@
 <AnchorPane prefHeight="369.0" prefWidth="341.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="RegistrationForm">
    <children>
       <TextField fx:id="fname" layoutX="110.0" layoutY="122.0" promptText="John" />
+      <TextField fx:id="lname" layoutX="110.0" layoutY="159.0" promptText="Doe" />
+      <TextField fx:id="email" layoutX="110.0" layoutY="197.0" prefHeight="25.0" prefWidth="84.0" promptText="john.doe" />
+      <PasswordField fx:id="password" layoutX="110.0" layoutY="233.0" onAction="#login" promptText="Strong Password" />
+      <Button fx:id="login" layoutX="148.0" layoutY="278.0" mnemonicParsing="false" onAction="#register" onMouseClicked="#login" text="Login" />
       <Label layoutX="47.0" layoutY="126.0" text="First Name" />
       <Label layoutX="62.0" layoutY="201.0" text="Email" />
-      <TextField fx:id="email" layoutX="110.0" layoutY="197.0" prefHeight="25.0" prefWidth="84.0" promptText="john.doe" />
       <Label layoutX="51.0" layoutY="237.0" text="Password" />
-      <PasswordField fx:id="password" layoutX="110.0" layoutY="233.0" onAction="#login" promptText="Strong Password" />
       <Label layoutX="110.0" layoutY="31.0" text="Email Client">
          <font>
             <Font size="24.0" />
@@ -21,10 +23,7 @@
             <Font name="System Bold" size="18.0" />
          </font>
       </Label>
-      <Button fx:id="login" layoutX="87.0" layoutY="276.0" mnemonicParsing="false" onAction="#login" onMouseClicked="#login" text="Login" />
-      <Button fx:id="forgotPassword" layoutX="160.0" layoutY="276.0" mnemonicParsing="false" text="Forgot Password" />
       <Label layoutX="47.0" layoutY="163.0" text="Last Name" />
-      <TextField fx:id="lname" layoutX="110.0" layoutY="159.0" promptText="Doe" />
       <Label layoutX="197.0" layoutY="201.0" prefHeight="17.0" prefWidth="124.0" text="\@mail.localserver.com" />
    </children>
 </AnchorPane>
