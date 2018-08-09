@@ -8,7 +8,7 @@
         <TextField fx:id="email" layoutX="110.0" layoutY="113.0" prefHeight="25.0" prefWidth="84.0" promptText="john.doe" />
         <PasswordField fx:id="password" layoutX="110.0" layoutY="145.0" onAction="#login" promptText="Strong Password" />
         <Button fx:id="login" layoutX="101.0" layoutY="189.0" mnemonicParsing="false" onAction="#login" onMouseClicked="#login" text="Login" />
-        <Button fx:id="forgotPassword" layoutX="161.0" layoutY="189.0" mnemonicParsing="false" text="Forgot Password" />
+        <Button fx:id="forgotPassword" layoutX="161.0" layoutY="189.0" mnemonicParsing="false" text="Forgot Password" onAction="#forgotPassword" />
         <Label layoutX="62.0" layoutY="117.0" text="Email" />
         <Label layoutX="51.0" layoutY="149.0" text="Password" />
         <Label layoutX="109.0" layoutY="14.0" text="Email Client">

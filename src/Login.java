@@ -114,6 +114,7 @@ public class Login implements Initializable {
             Folder emailFolder = emailStore.getFolder("INBOX");
             emailFolder.open(Folder.READ_ONLY);
             Message[] messages = emailFolder.getMessages();
+            System.out.println(String.format("User: %s@mail.localserver.com",email.getText()));
             System.out.println(String.format("INBOX - %d Messages",messages.length));
             for (int i = 0; i < messages.length; i++) {
                 Message message = messages[i];
@@ -131,4 +132,11 @@ public class Login implements Initializable {
         catch(MessagingException e) {e.printStackTrace();}
         catch (IOException e) {e.printStackTrace();}
     }
+
+    @FXML
+    private void forgotPassword()
+    {
+        System.out.println("Forgot Password - Feature Under Development");
+    }
+
 }

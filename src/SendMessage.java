@@ -1,5 +1,6 @@
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 
@@ -19,6 +20,13 @@ public class SendMessage implements Initializable {
     private TextField toField,subject;
     @FXML
     private TextArea messageField;
+    @FXML
+    private Button logout;
+    private Main main;
+
+    public void setMain(Main main) {
+        this.main = main;
+    }
 
     private Session session;
     private String email;
@@ -34,6 +42,12 @@ public class SendMessage implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
+    }
+
+    @FXML
+    private void logout()
+    {
+        main.loginForm();
     }
 
     @FXML

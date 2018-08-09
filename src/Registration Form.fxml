@@ -8,8 +8,8 @@
       <TextField fx:id="fname" layoutX="110.0" layoutY="122.0" promptText="John" />
       <TextField fx:id="lname" layoutX="110.0" layoutY="159.0" promptText="Doe" />
       <TextField fx:id="email" layoutX="110.0" layoutY="197.0" prefHeight="25.0" prefWidth="84.0" promptText="john.doe" />
-      <PasswordField fx:id="password" layoutX="110.0" layoutY="233.0" onAction="#login" promptText="Strong Password" />
-      <Button fx:id="login" layoutX="148.0" layoutY="278.0" mnemonicParsing="false" onAction="#register" onMouseClicked="#login" text="Login" />
+      <PasswordField fx:id="password" layoutX="110.0" layoutY="233.0" onAction="#register" promptText="Strong Password" />
+      <Button fx:id="login" layoutX="148.0" layoutY="278.0" mnemonicParsing="false" onAction="#register" onMouseClicked="#register" text="Login" />
       <Label layoutX="47.0" layoutY="126.0" text="First Name" />
       <Label layoutX="62.0" layoutY="201.0" text="Email" />
       <Label layoutX="51.0" layoutY="237.0" text="Password" />

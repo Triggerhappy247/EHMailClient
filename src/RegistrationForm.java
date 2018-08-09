@@ -52,5 +52,6 @@ public class RegistrationForm implements Initializable {
         Dispatch.put(account,"Active",t);
         Dispatch.put(account,"MaxSize",250);
         Dispatch.call(account,"Save");
+        main.loginForm();
     }
 }

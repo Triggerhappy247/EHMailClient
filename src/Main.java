@@ -30,19 +30,35 @@ public class Main extends Application {
         launch(args);
     }
 
-    public void registrationForm()
+    public void loginForm()
     {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("Registration Form.fxml"));
-        AnchorPane root = null;
         try {
-            root = (AnchorPane) loader.load();
-        } catch (IOException e) {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("Login.fxml"));
+            AnchorPane root = (AnchorPane) loader.load();
+            Login login = loader.getController();
+            login.setMain(this);
+            primaryStage.setTitle("Login");
+            primaryStage.setScene(new Scene(root));
+            primaryStage.show();
+        }catch (IOException e)
+        {
             e.printStackTrace();
         }
+    }
+
+    public void registrationForm()
+    {
+        try{
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("Registration Form.fxml"));
+        AnchorPane root = (AnchorPane) loader.load();
         RegistrationForm registrationForm = loader.getController();
+        registrationForm.setMain(this);
         primaryStage.setTitle("REGISTER");
         primaryStage.setScene(new Scene(root));
         primaryStage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void messageDialog(Session session,String email)
@@ -57,6 +73,7 @@ public class Main extends Application {
         SendMessage sendMsg = loader.getController();
         sendMsg.setSession(session);
         sendMsg.setEmail(email);
+        sendMsg.setMain(this);
         primaryStage.setTitle("Send Message");
         primaryStage.setScene(new Scene(root));
         primaryStage.show();
