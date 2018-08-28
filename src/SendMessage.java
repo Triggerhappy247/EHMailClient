@@ -3,6 +3,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.stage.Stage;
 
 import javax.mail.Message;
 import javax.mail.MessagingException;
@@ -20,9 +21,10 @@ public class SendMessage implements Initializable {
     private TextField toField,subject;
     @FXML
     private TextArea messageField;
-    @FXML
-    private Button logout;
     private Main main;
+
+    @FXML
+    Button cancel;
 
     public void setMain(Main main) {
         this.main = main;
@@ -45,12 +47,6 @@ public class SendMessage implements Initializable {
     }
 
     @FXML
-    private void logout()
-    {
-        main.loginForm();
-    }
-
-    @FXML
     private void sendMessage()
     {
         try {
@@ -62,9 +58,16 @@ public class SendMessage implements Initializable {
             message.setText(messageField.getText());
             //send message
             Transport.send(message);
-            System.out.println("message sent successfully");
+            closeWindow();
         } catch (AddressException e) {
             e.printStackTrace();
         } catch (MessagingException e) {throw new RuntimeException(e);}
+    }
+
+    @FXML
+    private void closeWindow()
+    {
+        Stage stage = (Stage)cancel.getScene().getWindow();
+        stage.close();
     }
 }

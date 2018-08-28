@@ -1,7 +1,6 @@
 import com.jacob.activeX.ActiveXComponent;
 import com.jacob.com.Dispatch;
 import com.jacob.com.Variant;
-import com.sun.mail.pop3.POP3Store;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -9,8 +8,9 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 
-import javax.mail.*;
-import java.io.IOException;
+import javax.mail.Authenticator;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Session;
 import java.net.URL;
 import java.util.Properties;
 import java.util.ResourceBundle;
@@ -32,10 +32,10 @@ public class Login implements Initializable {
     @FXML
     Button login,forgotPassword,register;
 
-    private Session session;
+    private Session sendSession;
 
-    public void setSession(Session session) {
-        this.session = session;
+    public void setSendSession(Session sendSession) {
+        this.sendSession = sendSession;
     }
 
     @Override
@@ -68,13 +68,14 @@ public class Login implements Initializable {
             incorrect.setVisible(true);
             return;
         }
-        else {
-            printMessages();
-        }
 
-        String host = "mail.localserver.com";
         Properties props = new Properties();
-        props.put("mail.smtp.host", host);
+        props.put("mail.smtp.host", "mail.localserver.com");
+
+        Properties properties = new Properties();
+        properties.put("mail.pop3.host", "mail.localserver.com");
+        properties.put("mail.pop3.port", "110");
+
         /*props.put("mail.smtp.socketFactory.port", "465");
         props.put("mail.smtp.socketFactory.class",
                 "javax.net.ssl.SSLSocketFactory");
@@ -88,51 +89,13 @@ public class Login implements Initializable {
             }
         };
 
-        Session session = Session.getInstance(props, auth);
-        setSession(session);
-        main.messageDialog(session,String.format("%s@mail.localserver.com",email.getText()));
+
+        Session receiveSession = Session.getInstance(properties, auth);
+        Session sendSession = Session.getInstance(props, auth);
+        setSendSession(sendSession);
+        main.mailView(sendSession,receiveSession,String.format("%s@mail.localserver.com",email.getText()),password.getText());
 
     }
-
-    private void printMessages()
-    {
-        try{
-            Properties properties = new Properties();
-            properties.put("mail.pop3.host", "mail.localserver.com");
-            properties.put("mail.pop3.port", "110");
-
-            Authenticator auth = new Authenticator() {
-                //override the getPasswordAuthentication method
-                protected PasswordAuthentication getPasswordAuthentication() {
-                    return new PasswordAuthentication(String.format("%s@mail.localserver.com",email.getText()), password.getText());
-                }
-            };
-
-            Session session = Session.getInstance(properties, auth);
-            POP3Store emailStore = (POP3Store) session.getStore("pop3");
-            emailStore.connect(String.format("%s@mail.localserver.com",email.getText()), password.getText());
-            Folder emailFolder = emailStore.getFolder("INBOX");
-            emailFolder.open(Folder.READ_ONLY);
-            Message[] messages = emailFolder.getMessages();
-            System.out.println(String.format("User: %s@mail.localserver.com",email.getText()));
-            System.out.println(String.format("INBOX - %d Messages",messages.length));
-            for (int i = 0; i < messages.length; i++) {
-                Message message = messages[i];
-                System.out.println("---------------------------------");
-                System.out.println("Email Number " + (i + 1));
-                System.out.println("Subject: " + message.getSubject());
-                System.out.println("From: " + message.getFrom()[0]);
-                System.out.println("Text: " + message.getContent().toString());
-            }
-            emailFolder.close(false);
-            emailStore.close();
-
-        }
-        catch(NoSuchProviderException e) {e.printStackTrace();}
-        catch(MessagingException e) {e.printStackTrace();}
-        catch (IOException e) {e.printStackTrace();}
-    }
-
     @FXML
     private void forgotPassword()
     {

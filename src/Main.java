@@ -1,7 +1,12 @@
+import com.jacob.activeX.ActiveXComponent;
+import com.jacob.com.Dispatch;
+import com.jacob.com.Variant;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.BorderPane;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import javax.mail.Session;
@@ -27,6 +32,16 @@ public class Main extends Application {
         stage.show();
     }
     public static void main(String[] args) {
+        ActiveXComponent application = new ActiveXComponent("hMailServer.Application");
+        System.out.println("hMailServer Library Loaded");
+        Dispatch.call(application,"Authenticate","Administrator","123456");
+        Variant variant = application.getProperty("Settings");
+        Dispatch settings = variant.getDispatch();
+        variant = Dispatch.get(settings,"Logging");
+        Dispatch logging = variant.getDispatch();
+        boolean t = true;
+        Dispatch.call(logging,"EnableLiveLogging",t);
+
         launch(args);
     }
 
@@ -37,6 +52,7 @@ public class Main extends Application {
             AnchorPane root = (AnchorPane) loader.load();
             Login login = loader.getController();
             login.setMain(this);
+            primaryStage.setResizable(false);
             primaryStage.setTitle("Login");
             primaryStage.setScene(new Scene(root));
             primaryStage.show();
@@ -74,7 +90,32 @@ public class Main extends Application {
         sendMsg.setSession(session);
         sendMsg.setEmail(email);
         sendMsg.setMain(this);
-        primaryStage.setTitle("Send Message");
+        Stage secondaryStage = new Stage();
+        secondaryStage.initModality(Modality.WINDOW_MODAL);
+        secondaryStage.initOwner(primaryStage);
+        secondaryStage.setResizable(false);
+        secondaryStage.setTitle("Send Message " + email);
+        secondaryStage.setScene(new Scene(root));
+        secondaryStage.show();
+    }
+
+    public void mailView(Session sendSession,Session recieveSession,String email,String password)
+    {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("MailView.fxml"));
+        BorderPane root = null;
+        try {
+            root = (BorderPane) loader.load();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        MailView mailView = loader.getController();
+        mailView.setSendSession(sendSession);
+        mailView.setReceiveSession(recieveSession);
+        mailView.setEmail(email);
+        mailView.setPassword(password);
+        mailView.setMain(this);
+        mailView.getMessages();
+        primaryStage.setTitle("Inbox of " + email);
         primaryStage.setScene(new Scene(root));
         primaryStage.show();
     }
