@@ -47,11 +47,28 @@ public class MailView implements Initializable {
     }
 
     @FXML
-    Button composeButton,logout;
+    private Button adminLogin,openLogs,createAccount;
     @FXML
-    ListView messageList;
+    private ListView messageList;
     @FXML
-    TextArea messageArea;
+    private TextArea messageArea;
+    private String logPath;
+
+    public void setLogPath(String logPath) {
+        this.logPath = logPath;
+    }
+
+    public Button getOpenLogs() {
+        return openLogs;
+    }
+
+    public Button getCreateAccount() {
+        return createAccount;
+    }
+
+    public Button getAdminLogin() {
+        return adminLogin;
+    }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -80,6 +97,11 @@ public class MailView implements Initializable {
             Folder emailFolder = emailStore.getFolder("INBOX");
             emailFolder.open(Folder.READ_ONLY);
             Message[] messages = emailFolder.getMessages();
+            if (messages.length == 0)
+            {
+                messageList.getItems().clear();
+                messageList.getItems().add("No Messages :(");
+            }
             for (int i = 0; i < messages.length; i++) {
                 Message message = messages[i];
                 String messageInfo = String.format("%s - %s",message.getFrom()[0],message.getSubject());
@@ -115,5 +137,25 @@ public class MailView implements Initializable {
                 "\nSubject: %s" +
                 "\n%s\n",info[0],email,info[1],messageContentList.get(selectedMessageIndex));
         messageArea.setText(message);
+    }
+    @FXML
+    private void openLogs()
+    {
+        try {
+            Runtime.getRuntime().exec(String.format("explorer.exe \"%s\"",logPath));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    @FXML
+    private void adminAuthenticate()
+    {
+        main.adminPassword(this);
+    }
+
+    @FXML
+    private void createAccount()
+    {
+        main.registrationForm();
     }
 }

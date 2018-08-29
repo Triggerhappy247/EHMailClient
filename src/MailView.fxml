@@ -9,6 +9,9 @@
             <Button fx:id="composeButton" layoutX="47.0" layoutY="87.0" mnemonicParsing="false" onAction="#composeMessage" text="Compose" />
             <Button fx:id="logout" layoutX="54.0" layoutY="347.0" mnemonicParsing="false" onAction="#logout" text="Logout" />
             <Button fx:id="refresh" layoutX="52.0" layoutY="51.0" mnemonicParsing="false" onAction="#getMessages" text="Refresh" />
+            <Button fx:id="adminLogin" layoutX="39.0" layoutY="300.0" mnemonicParsing="false" onAction="#adminAuthenticate" text="Admin Login" />
+            <Button fx:id="openLogs" disable="true" focusTraversable="false" layoutX="46.0" layoutY="124.0" mnemonicParsing="false" onAction="#openLogs" text="View Logs" visible="false" />
+            <Button fx:id="createAccount" disable="true" layoutX="32.0" layoutY="160.0" mnemonicParsing="false" onAction="#createAccount" text="Create Account" visible="false" />
          </children>
       </AnchorPane>
    </left>
