@@ -6,6 +6,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.stage.Stage;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -17,7 +18,8 @@ public class RegistrationForm implements Initializable {
     @FXML
     private PasswordField password;
     @FXML
-    private Button login,forgotPassword;
+    private Button cancel;
+
     private Main main;
 
     public void setMain(Main main) {
@@ -52,6 +54,13 @@ public class RegistrationForm implements Initializable {
         Dispatch.put(account,"Active",t);
         Dispatch.put(account,"MaxSize",250);
         Dispatch.call(account,"Save");
-        main.loginForm();
+        closeWindow();
+    }
+
+    @FXML
+    private void closeWindow()
+    {
+        Stage stage = (Stage)cancel.getScene().getWindow();
+        stage.close();
     }
 }
