@@ -14,6 +14,7 @@ import javax.mail.Session;
 import java.net.URL;
 import java.util.Properties;
 import java.util.ResourceBundle;
+import java.util.prefs.Preferences;
 
 public class Login implements Initializable {
 
@@ -68,7 +69,14 @@ public class Login implements Initializable {
             incorrect.setVisible(true);
             return;
         }
+        Preferences userLogin = Preferences.userNodeForPackage(Main.class);
+        userLogin.put("username",String.format("%s@mail.localserver.com",email.getText()));
+        userLogin.put("password",password.getText());
+        loginSession(String.format("%s@mail.localserver.com",email.getText()),password.getText());
+    }
 
+    public void loginSession(String email,String password)
+    {
         Properties props = new Properties();
         props.put("mail.smtp.host", "mail.localserver.com");
 
@@ -76,25 +84,17 @@ public class Login implements Initializable {
         properties.put("mail.pop3.host", "mail.localserver.com");
         properties.put("mail.pop3.port", "110");
 
-        /*props.put("mail.smtp.socketFactory.port", "465");
-        props.put("mail.smtp.socketFactory.class",
-                "javax.net.ssl.SSLSocketFactory");
-        props.put("mail.smtp.auth", "true");
-        props.put("mail.smtp.port", "465");*/
-
         Authenticator auth = new Authenticator() {
             //override the getPasswordAuthentication method
             protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication(String.format("%s@mail.localserver.com",email.getText()), password.getText());
+                return new PasswordAuthentication(email,password);
             }
         };
-
 
         Session receiveSession = Session.getInstance(properties, auth);
         Session sendSession = Session.getInstance(props, auth);
         setSendSession(sendSession);
-        main.mailView(sendSession,receiveSession,String.format("%s@mail.localserver.com",email.getText()),password.getText());
-
+        main.mailView(sendSession,receiveSession,email,password);
     }
     @FXML
     private void forgotPassword()

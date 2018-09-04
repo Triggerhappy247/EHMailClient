@@ -8,6 +8,7 @@ import javafx.stage.Stage;
 
 import javax.mail.Session;
 import java.io.IOException;
+import java.util.prefs.Preferences;
 
 public class Main extends Application {
 
@@ -20,9 +21,18 @@ public class Main extends Application {
     @Override
     public void start(Stage stage){
         setPrimaryStage(stage);
-        loginForm();
+        Preferences userLogin = Preferences.userNodeForPackage(Main.class);
+        String userName = userLogin.get("username","null");
+        if(userName.equals("null"))
+            loginForm();
+        else {
+            Login login = new Login();
+            login.setMain(this);
+            login.loginSession(userName,userLogin.get("password","null"));
+        }
     }
     public static void main(String[] args) {
+
         launch(args);
     }
 
