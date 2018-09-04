@@ -1,3 +1,5 @@
+import com.sun.jna.Native;
+import com.sun.jna.platform.win32.Crypt32Util;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -8,6 +10,7 @@ import javafx.stage.Stage;
 
 import javax.mail.Session;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.prefs.Preferences;
 
 public class Main extends Application {
@@ -22,13 +25,17 @@ public class Main extends Application {
     public void start(Stage stage){
         setPrimaryStage(stage);
         Preferences userLogin = Preferences.userNodeForPackage(Main.class);
-        String userName = userLogin.get("username","null");
-        if(userName.equals("null"))
+        byte nullData[] = new byte[1];
+        byte userNamebyte[] = userLogin.getByteArray("username",nullData);
+
+        if(Arrays.equals(userNamebyte,nullData))
             loginForm();
         else {
             Login login = new Login();
             login.setMain(this);
-            login.loginSession(userName,userLogin.get("password","null"));
+            byte decryptUserName[] = Crypt32Util.cryptUnprotectData(userNamebyte);
+            byte decryptPassword[] = Crypt32Util.cryptUnprotectData(userLogin.getByteArray("password",nullData));
+            login.loginSession(Native.toString(decryptUserName),Native.toString(decryptPassword));
         }
     }
     public static void main(String[] args) {

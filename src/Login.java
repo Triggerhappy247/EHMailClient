@@ -1,6 +1,8 @@
 import com.jacob.activeX.ActiveXComponent;
 import com.jacob.com.Dispatch;
 import com.jacob.com.Variant;
+import com.sun.jna.Native;
+import com.sun.jna.platform.win32.Crypt32Util;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -70,8 +72,10 @@ public class Login implements Initializable {
             return;
         }
         Preferences userLogin = Preferences.userNodeForPackage(Main.class);
-        userLogin.put("username",String.format("%s@mail.localserver.com",email.getText()));
-        userLogin.put("password",password.getText());
+        byte userNameByte[] = Native.toByteArray(String.format("%s@mail.localserver.com",email.getText()));
+        byte passwordByte[] = Native.toByteArray(password.getText());
+        userLogin.putByteArray("username",Crypt32Util.cryptProtectData(userNameByte));
+        userLogin.putByteArray("password",Crypt32Util.cryptProtectData(passwordByte));
         loginSession(String.format("%s@mail.localserver.com",email.getText()),password.getText());
     }
 
