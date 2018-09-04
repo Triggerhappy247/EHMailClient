@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
+import java.util.prefs.Preferences;
 
 public class MailView implements Initializable {
 
@@ -84,6 +85,11 @@ public class MailView implements Initializable {
     @FXML
     private void logout()
     {
+        Preferences userLogin = Preferences.userNodeForPackage(Main.class);
+        byte nullData[] = new byte[1];
+        userLogin.putByteArray("username",nullData);
+        userLogin.putByteArray("password",nullData);
+
         main.loginForm();
     }
 
@@ -128,15 +134,16 @@ public class MailView implements Initializable {
         try {
             selectedMessageIndex = messageList.getSelectionModel().getSelectedIndex();
             selectedMessage = (String)messageList.getSelectionModel().getSelectedItem();
+            String[] info = selectedMessage.split(" - ");
+            String message = String.format("From: %s" +
+                    "\nTo: %s" +
+                    "\nSubject: %s" +
+                    "\n%s\n",info[0],email,info[1],messageContentList.get(selectedMessageIndex));
+            messageArea.setText(message);
         } catch (NullPointerException e) {
             return;
         }
-        String[] info = selectedMessage.split(" - ");
-        String message = String.format("From: %s" +
-                "\nTo: %s" +
-                "\nSubject: %s" +
-                "\n%s\n",info[0],email,info[1],messageContentList.get(selectedMessageIndex));
-        messageArea.setText(message);
+
     }
     @FXML
     private void openLogs()
