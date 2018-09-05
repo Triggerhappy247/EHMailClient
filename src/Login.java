@@ -83,10 +83,16 @@ public class Login implements Initializable {
     {
         Properties props = new Properties();
         props.put("mail.smtp.host", "mail.localserver.com");
+        props.put("mail.smtp.port", 465);
+        props.put("mail.smtp.starttls.required",true);
+        props.put("mail.smtp.ssl.trust","*");
 
         Properties properties = new Properties();
         properties.put("mail.pop3.host", "mail.localserver.com");
-        properties.put("mail.pop3.port", "110");
+        properties.put("mail.pop3.port", 995);
+        properties.put("mail.pop3.starttls.required",true);
+        properties.put("mail.pop3.ssl.trust","*");
+
 
         Authenticator auth = new Authenticator() {
             //override the getPasswordAuthentication method
