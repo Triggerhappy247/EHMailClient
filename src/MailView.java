@@ -1,10 +1,7 @@
 import com.sun.mail.pop3.POP3Store;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.ListView;
-import javafx.scene.control.SelectionMode;
-import javafx.scene.control.TextArea;
+import javafx.scene.control.*;
 
 import javax.mail.Folder;
 import javax.mail.Message;
@@ -53,6 +50,8 @@ public class MailView implements Initializable {
     private ListView messageList;
     @FXML
     private TextArea messageArea;
+    @FXML
+    private MenuItem addAccount;
     private String logPath;
 
     public void setLogPath(String logPath) {
@@ -89,7 +88,8 @@ public class MailView implements Initializable {
         byte nullData[] = new byte[1];
         userLogin.putByteArray("username",nullData);
         userLogin.putByteArray("password",nullData);
-
+        int numOfAccounts = userLogin.getInt("accountNumber",0);
+        userLogin.putInt("accountNumber",numOfAccounts-1);
         main.loginForm();
     }
 

@@ -74,6 +74,8 @@ public class Login implements Initializable {
         Preferences userLogin = Preferences.userNodeForPackage(Main.class);
         byte userNameByte[] = Native.toByteArray(String.format("%s@mail.localserver.com",email.getText()));
         byte passwordByte[] = Native.toByteArray(password.getText());
+        int numOfAccounts = userLogin.getInt("accountNumber",0);
+        userLogin.putInt("accountNumber",numOfAccounts+1);
         userLogin.putByteArray("username",Crypt32Util.cryptProtectData(userNameByte));
         userLogin.putByteArray("password",Crypt32Util.cryptProtectData(passwordByte));
         loginSession(String.format("%s@mail.localserver.com",email.getText()),password.getText());
