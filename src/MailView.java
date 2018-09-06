@@ -1,4 +1,8 @@
+import com.sun.jna.Native;
+import com.sun.jna.platform.win32.Crypt32Util;
 import com.sun.mail.pop3.POP3Store;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -52,7 +56,33 @@ public class MailView implements Initializable {
     private TextArea messageArea;
     @FXML
     private MenuItem addAccount;
+    @FXML
+    private Menu accountMenu;
+    private int accountNumber;
     private String logPath;
+    private Login login;
+    private String emails[],passwords[];
+    private int accNumber[];
+
+    public void setEmails(String[] emails) {
+        this.emails = emails;
+    }
+
+    public void setPasswords(String[] passwords) {
+        this.passwords = passwords;
+    }
+
+    public void setAccNumber(int[] accNumber) {
+        this.accNumber = accNumber;
+    }
+
+    public void setLogin(Login login) {
+        this.login = login;
+    }
+
+    public void setAccountNumber(int accountNumber) {
+        this.accountNumber = accountNumber;
+    }
 
     public void setLogPath(String logPath) {
         this.logPath = logPath;
@@ -82,16 +112,71 @@ public class MailView implements Initializable {
     }
 
     @FXML
+    private void addAccount(){
+        main.modalLoginform();
+    }
+
+    @FXML
     private void logout()
     {
         Preferences userLogin = Preferences.userNodeForPackage(Main.class);
         byte nullData[] = new byte[1];
-        userLogin.putByteArray("username",nullData);
-        userLogin.putByteArray("password",nullData);
         int numOfAccounts = userLogin.getInt("accountNumber",0);
-        userLogin.putInt("accountNumber",numOfAccounts-1);
-        main.loginForm();
+        for (int i = accountNumber; i < numOfAccounts; i++) {
+            userLogin.put(String.format("username%d",i),userLogin.get(String.format("username%d",i+1),null));
+            userLogin.putByteArray(String.format("password%d",i),userLogin.getByteArray(String.format("password%d",i+1),nullData));
+        }
+        userLogin.remove(String.format("username%d",numOfAccounts));
+        userLogin.remove(String.format("password%d",numOfAccounts));
+        userLogin.putInt("accountNumber",--numOfAccounts);
+        updateEandP();
+        if(numOfAccounts == 0)
+            main.loginForm();
+        else
+        {
+            login.loginSession(emails[1],passwords[1],accNumber[1]);
+        }
     }
+
+    private void updateEandP()
+    {
+        Preferences userLogin = Preferences.userNodeForPackage(Main.class);
+        int numOfAccounts = userLogin.getInt("accountNumber",0);
+        byte nullData[] = new byte[1];
+        byte passByte[];
+        String emails[] = new String[numOfAccounts+1];
+        String passwords[] = new String[numOfAccounts+1];
+        int accNumber[] = new int[numOfAccounts+1];
+        for (int i = 1; i <= numOfAccounts; i++) {
+            passByte = Crypt32Util.cryptUnprotectData(userLogin.getByteArray(String.format("password%d",i),nullData));
+            emails[i] = userLogin.get(String.format("username%d",i),null);
+            passwords[i] = Native.toString(passByte);
+            accNumber[i] = i;
+        }
+
+        setEmails(emails);
+        setPasswords(passwords);
+        setAccNumber(accNumber);
+    }
+
+    public void fillAccountsMenu()
+    {
+        updateEandP();
+        MenuItem emailMenuItem;
+        for (int i : accNumber) {
+            if(i == accountNumber || i == 0)
+                continue;
+            emailMenuItem = new MenuItem(emails[i]);
+            emailMenuItem.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent event) {
+                    login.loginSession(emails[i],passwords[i],i);
+                }
+            });
+            accountMenu.getItems().add(emailMenuItem);
+        }
+    }
+
 
     public void getMessages()
     {
@@ -107,6 +192,7 @@ public class MailView implements Initializable {
             {
                 messageList.getItems().clear();
                 messageList.getItems().add("No Messages :(");
+                return;
             }
             for (int i = 0; i < messages.length; i++) {
                 Message message = messages[i];
@@ -142,6 +228,8 @@ public class MailView implements Initializable {
             messageArea.setText(message);
         } catch (NullPointerException e) {
             return;
+        } catch (ArrayIndexOutOfBoundsException e){
+            return;
         }
 
     }
@@ -164,5 +252,11 @@ public class MailView implements Initializable {
     private void createAccount()
     {
         main.registrationForm();
+    }
+
+    @FXML
+    private void aboutPage()
+    {
+        main.aboutPage();
     }
 }

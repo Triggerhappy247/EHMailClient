@@ -9,6 +9,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
 import javax.mail.Authenticator;
 import javax.mail.PasswordAuthentication;
@@ -33,7 +35,7 @@ public class Login implements Initializable {
     @FXML
     PasswordField password;
     @FXML
-    Button login,forgotPassword,register;
+    Button login,register;
 
     private Session sendSession;
 
@@ -72,16 +74,19 @@ public class Login implements Initializable {
             return;
         }
         Preferences userLogin = Preferences.userNodeForPackage(Main.class);
-        byte userNameByte[] = Native.toByteArray(String.format("%s@mail.localserver.com",email.getText()));
         byte passwordByte[] = Native.toByteArray(password.getText());
         int numOfAccounts = userLogin.getInt("accountNumber",0);
-        userLogin.putInt("accountNumber",numOfAccounts+1);
-        userLogin.putByteArray("username",Crypt32Util.cryptProtectData(userNameByte));
-        userLogin.putByteArray("password",Crypt32Util.cryptProtectData(passwordByte));
-        loginSession(String.format("%s@mail.localserver.com",email.getText()),password.getText());
+        numOfAccounts++;
+        userLogin.putInt("accountNumber",numOfAccounts);
+        userLogin.put(String.format("username%d",numOfAccounts),String.format("%s@mail.localserver.com",email.getText()));
+        userLogin.putByteArray(String.format("password%d",numOfAccounts),Crypt32Util.cryptProtectData(passwordByte));
+        Stage stage = (Stage)login.getScene().getWindow();
+        if(stage.getModality() == Modality.WINDOW_MODAL)
+            stage.close();
+        loginSession(String.format("%s@mail.localserver.com",email.getText()),password.getText(),numOfAccounts);
     }
 
-    public void loginSession(String email,String password)
+    public void loginSession(String email,String password,int accountNumber)
     {
         Properties props = new Properties();
         props.put("mail.smtp.host", "mail.localserver.com");
@@ -106,12 +111,8 @@ public class Login implements Initializable {
         Session receiveSession = Session.getInstance(properties, auth);
         Session sendSession = Session.getInstance(props, auth);
         setSendSession(sendSession);
-        main.mailView(sendSession,receiveSession,email,password);
+        main.mailView(sendSession,receiveSession,email,password,accountNumber,this);
     }
-    @FXML
-    private void forgotPassword()
-    {
-        System.out.println("Forgot Password - Feature Under Development");
-    }
+
 
 }

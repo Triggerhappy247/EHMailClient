@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+<AnchorPane prefHeight="187.0" prefWidth="345.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Label layoutX="106.0" layoutY="23.0" text="Email Client">
+         <font>
+            <Font name="System Bold" size="24.0" />
+         </font>
+      </Label>
+      <Label layoutX="137.0" layoutY="85.0" text="Developed By" />
+      <Label layoutX="86.0" layoutY="102.0" text="Qasim Burhan Bhatia (16BCE059)" />
+      <Label layoutX="146.0" layoutY="135.0" text="Guided By" />
+      <Label layoutX="122.0" layoutY="152.0" text="Dr. Sharada Valiveti" />
+   </children>
+</AnchorPane>

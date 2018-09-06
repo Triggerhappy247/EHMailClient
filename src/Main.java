@@ -10,7 +10,6 @@ import javafx.stage.Stage;
 
 import javax.mail.Session;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.prefs.Preferences;
 
 public class Main extends Application {
@@ -26,16 +25,15 @@ public class Main extends Application {
         setPrimaryStage(stage);
         Preferences userLogin = Preferences.userNodeForPackage(Main.class);
         byte nullData[] = new byte[1];
-        byte userNamebyte[] = userLogin.getByteArray("username",nullData);
-
-        if(Arrays.equals(userNamebyte,nullData))
+        int numOfAccounts = userLogin.getInt("accountNumber",0);
+        if(numOfAccounts == 0)
             loginForm();
         else {
             Login login = new Login();
             login.setMain(this);
-            byte decryptUserName[] = Crypt32Util.cryptUnprotectData(userNamebyte);
-            byte decryptPassword[] = Crypt32Util.cryptUnprotectData(userLogin.getByteArray("password",nullData));
-            login.loginSession(Native.toString(decryptUserName),Native.toString(decryptPassword));
+            String userName = userLogin.get("username1",null);
+            byte decryptPassword[] = Crypt32Util.cryptUnprotectData(userLogin.getByteArray("password1",nullData));
+            login.loginSession(userName,Native.toString(decryptPassword),1);
         }
     }
     public static void main(String[] args) {
@@ -60,20 +58,39 @@ public class Main extends Application {
         }
     }
 
+    public void modalLoginform()
+    {
+        try{
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("Login.fxml"));
+            AnchorPane root = (AnchorPane) loader.load();
+            Login login = loader.getController();
+            login.setMain(this);
+            Stage secondaryStage = new Stage();
+            secondaryStage.initModality(Modality.WINDOW_MODAL);
+            secondaryStage.initOwner(primaryStage);
+            secondaryStage.setResizable(false);
+            secondaryStage.setTitle("Add Account");
+            secondaryStage.setScene(new Scene(root));
+            secondaryStage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void registrationForm()
     {
         try{
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("Registration Form.fxml"));
-        AnchorPane root = (AnchorPane) loader.load();
-        RegistrationForm registrationForm = loader.getController();
-        registrationForm.setMain(this);
-        Stage secondaryStage = new Stage();
-        secondaryStage.initModality(Modality.WINDOW_MODAL);
-        secondaryStage.initOwner(primaryStage);
-        secondaryStage.setResizable(false);
-        secondaryStage.setTitle("REGISTER");
-        secondaryStage.setScene(new Scene(root));
-        secondaryStage.show();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("Registration Form.fxml"));
+            AnchorPane root = (AnchorPane) loader.load();
+            RegistrationForm registrationForm = loader.getController();
+            registrationForm.setMain(this);
+            Stage secondaryStage = new Stage();
+            secondaryStage.initModality(Modality.WINDOW_MODAL);
+            secondaryStage.initOwner(primaryStage);
+            secondaryStage.setResizable(false);
+            secondaryStage.setTitle("REGISTER");
+            secondaryStage.setScene(new Scene(root));
+            secondaryStage.show();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -101,7 +118,7 @@ public class Main extends Application {
         secondaryStage.show();
     }
 
-    public void mailView(Session sendSession,Session recieveSession,String email,String password)
+    public void mailView(Session sendSession,Session recieveSession,String email,String password,int accountNumber,Login login)
     {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("MailView.fxml"));
         BorderPane root = null;
@@ -115,7 +132,10 @@ public class Main extends Application {
         mailView.setReceiveSession(recieveSession);
         mailView.setEmail(email);
         mailView.setPassword(password);
+        mailView.setAccountNumber(accountNumber);
         mailView.setMain(this);
+        mailView.setLogin(login);
+        mailView.fillAccountsMenu();
         mailView.getMessages();
         primaryStage.setResizable(false);
         primaryStage.setTitle("Inbox of " + email);
@@ -139,6 +159,24 @@ public class Main extends Application {
         secondaryStage.initOwner(primaryStage);
         secondaryStage.setResizable(false);
         secondaryStage.setTitle("Enter Administrator Password");
+        secondaryStage.setScene(new Scene(root));
+        secondaryStage.show();
+    }
+
+    public void aboutPage()
+    {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("AboutPage.fxml"));
+        AnchorPane root = null;
+        try {
+            root = (AnchorPane) loader.load();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Stage secondaryStage = new Stage();
+        secondaryStage.initModality(Modality.WINDOW_MODAL);
+        secondaryStage.initOwner(primaryStage);
+        secondaryStage.setResizable(false);
+        secondaryStage.setTitle("About Page");
         secondaryStage.setScene(new Scene(root));
         secondaryStage.show();
     }

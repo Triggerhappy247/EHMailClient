@@ -26,14 +26,14 @@
    <top>
       <MenuBar BorderPane.alignment="CENTER">
         <menus>
-          <Menu mnemonicParsing="false" text="Accounts">
+          <Menu fx:id="accountMenu" mnemonicParsing="false" text="Accounts">
             <items>
-              <MenuItem fx:id="addAccount" mnemonicParsing="false" text="Add" />
+              <MenuItem fx:id="addAccount" mnemonicParsing="false" onAction="#addAccount" text="Add" />
             </items>
           </Menu>
           <Menu mnemonicParsing="false" text="Help">
             <items>
-              <MenuItem mnemonicParsing="false" text="About" />
+              <MenuItem mnemonicParsing="false" onAction="#aboutPage" text="About" />
             </items>
           </Menu>
         </menus>
